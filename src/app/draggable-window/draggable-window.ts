@@ -1,9 +1,13 @@
 import { Component, ElementRef, Renderer2, ViewChild, AfterViewInit, Input, OnInit } from '@angular/core';
+import {NgOptimizedImage, NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-draggable-window',
   templateUrl: 'draggable-window.html',
   standalone: true,
+  imports: [
+    NgStyle
+  ],
   styleUrls: ['draggable-window.scss']
 })
 export class DraggableWindowComponent implements AfterViewInit, OnInit {
@@ -14,6 +18,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   @Input() height: number = 200;  // Default height
   @Input() x: number = 0;         // Initial x position
   @Input() y: number = 0;         // Initial y position
+  @Input() z: number = 1;
   @Input() desc: string = "window";
 
   private isDragging = false;
@@ -27,6 +32,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     // Initialize window styles here or in the view
     console.log(`Initial values: x=${this.x}, y=${this.y}, width=${this.width}, height=${this.height}`);
+    this.z = this.z * 2;
   }
 
   ngAfterViewInit(): void {
@@ -36,7 +42,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       this.window.nativeElement.style.height = `${this.height}px`;
       this.window.nativeElement.style.left = `${this.x}px`;
       this.window.nativeElement.style.top = `${this.y}px`;
-
+      this.window.nativeElement.style.zIndex = `${this.z}`
       // Set the background image if provided
       if (this.picture) {
         this.window.nativeElement.style.backgroundImage = `url(${this.picture})`;

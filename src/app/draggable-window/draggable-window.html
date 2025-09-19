@@ -1,8 +1,13 @@
 <div #window class="draggable-window" (mousedown)="onMouseDown($event)">
-  <div class="window-header">
+  <div class="window-header" [ngStyle]="{'z-index': picture}">>
     <span class="window-title">{{ desc }}</span>
   </div>
-  <div class="window-content">
-
+  <div class="window-content" [ngStyle]="{
+  'background-image': 'url(' + picture + ')',
+  'background-size': 'cover',
+  'background-position': 'center',
+  'background-repeat': 'no-repeat'
+}">
+    <!-- The image is now handled by CSS background dynamically -->
   </div>
 </div>
