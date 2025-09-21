@@ -14,12 +14,13 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   @ViewChild('window', { static: false }) window!: ElementRef;
 
   @Input() picture: string = '';  // URL or path to the image for background
-  @Input() width: number = 300;   // Default width
-  @Input() height: number = 200;  // Default height
-  @Input() x: number = 0;         // Initial x position
-  @Input() y: number = 0;         // Initial y position
+  @Input() width: number = 500;   // Default width
+  @Input() height: number = 400;  // Default height
+  @Input() x: number = 200;         // Initial x position
+  @Input() y: number = 200;         // Initial y position
   @Input() z: number = 1;
   @Input() desc: string = "window";
+  @Input() minimized = false;
 
   private isDragging = false;
   private offsetX = 0;
@@ -30,7 +31,9 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   constructor(private renderer: Renderer2) {}
 
   ngOnInit(): void {
-    // Initialize window styles here or in the view
+    if(this.minimized){
+      this.minimize();
+    }
     console.log(`Initial values: x=${this.x}, y=${this.y}, width=${this.width}, height=${this.height}`);
     this.z = this.z * 2;
   }
@@ -84,4 +87,45 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
     this.mouseMoveListener();
     this.mouseUpListener();
   }
+
+  async minimize() {
+    this.minimized = true;
+    if (this.window) {
+      const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
+      if (header) {
+        header.style.display = 'none';
+      }
+
+      this.window.nativeElement.style.transition = `0.5s`;
+      this.window.nativeElement.style.width = `100px`;
+      this.window.nativeElement.style.height = `80px`;
+      await this.sleep(500);
+      this.window.nativeElement.style.transition = `0s`;
+    }
+  }
+
+  async maximize() {
+    if(!this.minimized){
+      await this.minimize();
+      return;
+    }
+    this.minimized = false;
+    if (this.window) {
+      const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
+      if (header) {
+        header.style.display = 'flex'; // flex works better for your layout than block
+      }
+
+      this.window.nativeElement.style.transition = `0.5s`;
+      this.window.nativeElement.style.width = `500px`;
+      this.window.nativeElement.style.height = `400px`;
+      await this.sleep(500);
+      this.window.nativeElement.style.transition = `0s`;
+    }
+  }
+
+  sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 }

@@ -18,9 +18,11 @@
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   cursor: grab;
+  transition: 0.3s;
 }
 
 .window-content {
+  border-radius: 8px;
   flex-grow: 1;
   padding-top: 40px;
   position: relative;
@@ -29,6 +31,16 @@
 .window-title {
   font-weight: bold;
 }
+.minimize {
+  float: right;
+  border: 0;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.minimize:hover {
+  cursor: pointer;
+ }
 
 img {
   width: 100%;
