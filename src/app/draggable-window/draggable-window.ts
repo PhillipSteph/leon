@@ -112,8 +112,9 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
     this.minimized = false;
     if (this.window) {
       const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
+
       if (header) {
-        header.style.display = 'flex'; // flex works better for your layout than block
+        header.style.display = 'block';
       }
 
       this.window.nativeElement.style.transition = `0.5s`;
