@@ -31,9 +31,6 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   constructor(private renderer: Renderer2) {}
 
   ngOnInit(): void {
-    if(this.minimized){
-      this.minimize();
-    }
     console.log(`Initial values: x=${this.x}, y=${this.y}, width=${this.width}, height=${this.height}`);
     this.z = this.z * 2;
   }
@@ -52,6 +49,9 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
         this.window.nativeElement.style.backgroundSize = 'cover';
         this.window.nativeElement.style.backgroundPosition = 'center';
       }
+    }
+    if(this.minimized){
+      this.minimize();
     }
   }
 
