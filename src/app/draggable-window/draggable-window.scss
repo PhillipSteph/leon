@@ -12,13 +12,32 @@
 }
 
 .window-header {
-  background-color: #007bff;
   color: white;
   padding: 10px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   cursor: grab;
-  transition: 0.3s;
+
+  background: rgba(145, 145, 145, 0.15);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.window-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3) 0%,   // top-left brighter
+      rgba(255, 255, 255, 0.1) 100%   // bottom-right dimmer
+  );
+  pointer-events: none;  // don't block clicks
 }
 
 .window-content {
@@ -29,18 +48,29 @@
 }
 
 .window-title {
-  font-weight: bold;
+  font-size: 24px;
 }
 .minimize {
   float: right;
-  border: 0;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 16px;
+  padding: 4px 8px;
+  color: white;
+
+  background: rgba(255, 255, 255, 0.15); // translucent background
+  backdrop-filter: blur(6px);            // frosted glass blur
+  -webkit-backdrop-filter: blur(6px);    // Safari support
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .minimize:hover {
   cursor: pointer;
- }
+  background: rgba(255, 255, 255, 0.25); // a bit brighter on hover
+  transform: scale(1.1); // slight zoom effect
+}
+
 
 img {
   width: 100%;
