@@ -19,6 +19,12 @@ export class Folder implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     folderManager.registerFolder(this.x,this.y,this.folderId, this.images)
+
+    folderManager.folderDroppedEvent.subscribe(({ picture, folderId }) => {
+      if(folderId === this.folderId){
+        this.images.push(picture);
+      }
+    });
   }
   ngAfterViewInit(): void {
     if (this.window) {

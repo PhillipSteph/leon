@@ -49,5 +49,12 @@ export class Desktop implements OnInit {
     folderManager.openImageEvent.subscribe(windowData => {
       this.windows.push(windowData);
     });
+
+    folderManager.folderDroppedEvent.subscribe(({ picture, folderId }) => {
+      console.log(`Window dropped on folder ${folderId} with image ${picture}`);
+      // Remove the window with the same picture from the windows array
+      this.windows = this.windows.filter(win => win.picture !== picture);
+    });
+
   }
 }

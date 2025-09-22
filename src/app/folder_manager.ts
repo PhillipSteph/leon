@@ -15,23 +15,27 @@ export class folderManager {
   public static folderArray: FolderModel[] = [];
   public static openImageEvent: EventEmitter<any> = new EventEmitter();
 
+  static folderDroppedEvent: EventEmitter<{ picture: string, folderId: number }> = new EventEmitter();
+
   static generateId(): number {
     return folderManager.idCounter++;
   }
 
   static registerFolder(x: number, y: number, folderId: number, images: string[]): void {
-    // Check if folder already exists
     const exists = this.folderArray.some(folder => folder.id === folderId);
     if (exists) {
       console.log(`Folder with id ${folderId} already exists.`);
       return;
     }
 
-    // If not exists, add it
-    const newFolder = new FolderModel(folderId, x, y, images);
+    // Clone the array to prevent shared reference issues
+    const clonedImages = [...images];
+
+    const newFolder = new FolderModel(folderId, x, y, clonedImages);
     this.folderArray.push(newFolder);
     console.log(`Folder with id ${folderId} registered.`);
   }
+
 
   static openImages(folderId: number, images: string[], x: number, y: number) {
     x+= 70;

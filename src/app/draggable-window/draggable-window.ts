@@ -112,11 +112,41 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   }
 
   // Called when mouse is released
-  onMouseUp(): void {
+  onMouseUp(event?: MouseEvent): void {
     this.isDragging = false;
     this.mouseMoveListener();
     this.mouseUpListener();
+
+    if (!event) return;
+
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    // Find all folders under the mouse
+    const targetFolders = folderManager.folderArray.filter(folder =>
+      mouseX >= folder.x &&
+      mouseX <= folder.x + 100 &&
+      mouseY >= folder.y &&
+      mouseY <= folder.y + 100
+    );
+
+    if (targetFolders.length > 0) {
+      // Pick the folder with the highest numeric ID
+      const targetFolder = targetFolders.reduce((a, b) =>
+        a.id > b.id ? a : b
+      );
+
+      // Push the image into the folder
+      targetFolder.images.push(this.picture);
+
+      // Emit event for DesktopComponent
+      folderManager.folderDroppedEvent.emit({
+        picture: this.picture,
+        folderId: targetFolder.id
+      });
+    }
   }
+
 
   async minimize() {
     this.minimized = true;
