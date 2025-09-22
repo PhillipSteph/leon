@@ -2,14 +2,18 @@
   position: absolute;  // To allow free movement on the screen
   width: 300px;
   height: 200px;
-  background: #fff;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 3px solid #d8d8d8;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   cursor: move;
   display: flex;
   flex-direction: column;
 }
+
+.draggable-window.minimized{
+  border-radius: 6px;
+}
+
 .draggable-window,
 .draggable-window * {
   user-select: none;       // standard
@@ -17,70 +21,89 @@
   -moz-user-select: none;    // Firefox
   -ms-user-select: none;     // IE/Edge
 }
+
 .window-header {
   color: white;
   padding: 10px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
   cursor: grab;
-
-  background: rgba(145, 145, 145, 0.15);
+  height: 30px;
+  background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.15) 100%
+  );
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
   overflow: hidden;
-
-  transition: background 0.3s ease, transform 0.2s ease;
+  position: relative;
 }
 
+/* Create a pseudo-element that covers the entire header */
 .window-header::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  backdrop-filter: inherit;
+  -webkit-backdrop-filter: inherit;
   border-radius: inherit;
-  background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.3) 0%,   // top-left brighter
-      rgba(255, 255, 255, 0.1) 100%   // bottom-right dimmer
-  );
-  pointer-events: none;  // don't block clicks
+  mask: radial-gradient(circle at calc(100% - 28px) 50%, transparent 18px, black 19px);
 }
 
 .window-content {
-  border-radius: 8px;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  border-top: 2px solid #ccc;
   flex-grow: 1;
-  padding-top: 40px;
-  position: relative;
+  padding-top: 30px;
+}
+
+.window-content.minimized{
+  border-radius: 4px;
 }
 
 .window-title {
   font-size: 24px;
+  position: relative;
+  z-index: 2;
 }
+
 .minimize {
   float: right;
-  border-radius: 6px;
+  margin-top: -4px;
+  margin-right: -1px;
+  border: 2px solid #ccc;
+  border-radius: 1000px;
   font-size: 16px;
+  height: 38px;
+  width: 38px;
   padding: 4px 8px;
   color: white;
-
-  background: rgba(255, 255, 255, 0.15); // translucent background
-  backdrop-filter: blur(6px);            // frosted glass blur
-  -webkit-backdrop-filter: blur(6px);    // Safari support
-  border: 1px solid rgba(255, 255, 255, 0.25);
-
+  background: transparent;
   transition: background 0.3s ease, transform 0.2s ease;
+  position: relative;
+  z-index: 3;
+  align-items: center;
+  justify-content: center;
 }
 
-.minimize:hover {
-  cursor: pointer;
-  background: rgba(255, 255, 255, 0.25); // a bit brighter on hover
-  transform: scale(1.1); // slight zoom effect
+.minimize:hover{
+  border: 2px solid #ececec;
+  transition: 0.3s;
+
+  .hyphen{
+    border: 2px solid rgb(255, 255, 255);
+    transition: 0.3s;
+  }
 }
-
-
-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+.hyphen{
+  width: 15px;
+  height: 0px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: rgba(0, 0, 0, 0.15) 1px 1px;
 }

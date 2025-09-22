@@ -1,0 +1,20 @@
+.taskbar{
+  width: 50%;
+  height: 60px;
+  position: absolute;
+  left: 25%;
+  bottom: 20px;
+  border-radius: 100px;
+  background: rgba(145, 145, 145, 0.15);
+  background: linear-gradient(
+      180deg,
+      rgba(145, 145, 145, 0.15) 0%,
+      rgba(0, 0, 0, 0.15) 100%
+  );
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+  z-index: 1000;
+}

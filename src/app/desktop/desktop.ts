@@ -3,13 +3,15 @@ import {DraggableWindowComponent} from '../draggable-window/draggable-window';
 import {Folder} from '../folder/folder';
 import {folderManager} from '../folder_manager';
 import {NgForOf} from '@angular/common';
+import {Taskbar} from '../taskbar/taskbar';
 
 @Component({
   selector: 'app-desktop',
   imports: [
     DraggableWindowComponent,
     Folder,
-    NgForOf
+    NgForOf,
+    Taskbar
   ],
   standalone: true,
   templateUrl: './desktop.html',
@@ -34,6 +36,8 @@ export class Desktop implements OnInit {
         x: 200,
         y: 200,
         z: 2,
+        width: 500,
+        height: 600,
         minimized: false
       },
       {

@@ -23,7 +23,6 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   @Input() desc: string = "window";
   @Input() minimized = false;
   private transitionTimeout: any;
-  private currentlyminimized = false;
   private isDragging = false;
   private offsetX = 0;
   private offsetY = 0;
@@ -45,12 +44,6 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       this.window.nativeElement.style.left = `${this.x}px`;
       this.window.nativeElement.style.top = `${this.y}px`;
       this.window.nativeElement.style.zIndex = `${this.z}`
-      // Set the background image if provided
-      if (this.picture) {
-        this.window.nativeElement.style.backgroundImage = `url(${this.picture})`;
-        this.window.nativeElement.style.backgroundSize = 'cover';
-        this.window.nativeElement.style.backgroundPosition = 'center';
-      }
     }
     if(this.minimized){
       this.minimize();
@@ -80,7 +73,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       this.window.nativeElement.style.left = `${x}px`;
       this.window.nativeElement.style.top = `${y}px`;
 
-      if (this.mouseIsOnFolder(event)) {
+      if (this.mouseIsOnFolder(event) && this.minimized) {
         this.window.nativeElement.style.transition = '0.1s';
         // Shrink the window when over a folder
         this.window.nativeElement.style.width = `50px`;
@@ -116,8 +109,6 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
           this.window.nativeElement.style.width = `100px`;
           this.window.nativeElement.style.height = `80px`;
         }
-        // Restore original size when not over a folder
-        this.currentlyminimized = false;
       }
     }
   }
