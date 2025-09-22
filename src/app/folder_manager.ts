@@ -14,7 +14,6 @@ export class folderManager {
 
   public static folderArray: FolderModel[] = [];
   public static openImageEvent: EventEmitter<any> = new EventEmitter();
-  public static closeWindowEvent: EventEmitter<string> = new EventEmitter();
 
   static generateId(): number {
     return folderManager.idCounter++;
@@ -53,9 +52,6 @@ export class folderManager {
       folder.images = [];  // reset to empty array
       console.log(`Cleared images of folder ${folderId}`);
     }
-  }
-  static closeWindow(uuid: string) {
-    this.closeWindowEvent.emit(uuid);
   }
 
 }
