@@ -70,7 +70,6 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       console.error('Window reference is not available');
     }
   }
-
   // Called while dragging
   onMouseMove(event: MouseEvent): void {
     if (this.isDragging && this.window) {
@@ -78,7 +77,38 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       const y = event.clientY - this.offsetY;
       this.window.nativeElement.style.left = `${x}px`;
       this.window.nativeElement.style.top = `${y}px`;
+
+      if (this.mouseIsOnFolder(event)) {
+        // Shrink the window when over a folder
+        this.window.nativeElement.style.width = `50px`;
+        this.window.nativeElement.style.height = `40px`;
+
+        this.window.nativeElement.style.left = `${event.clientX}px`;
+        this.window.nativeElement.style.top = `${event.clientY}px`;
+      } else {
+        if(!this.minimized){
+          this.window.nativeElement.style.width = `${this.width}px`;
+          this.window.nativeElement.style.height = `${this.height}px`;
+        }else{
+          this.window.nativeElement.style.width = `100px`;
+          this.window.nativeElement.style.height = `80px`;
+        }
+        // Restore original size when not over a folder
+
+      }
     }
+  }
+
+  mouseIsOnFolder(event: MouseEvent): boolean {
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    return folderManager.folderArray.some(folder =>
+      mouseX > folder.x &&
+      mouseX < folder.x + 100 &&
+      mouseY > folder.y &&
+      mouseY < folder.y + 100
+    );
   }
 
   // Called when mouse is released

@@ -34,6 +34,8 @@ export class folderManager {
   }
 
   static openImages(folderId: number, images: string[], x: number, y: number) {
+    x+= 70;
+    y+= 70;
     let zCounter: number = this.idCounter;
     images.forEach((imgUrl, index) => {
       const windowData = {

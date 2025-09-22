@@ -10,7 +10,13 @@
   display: flex;
   flex-direction: column;
 }
-
+.draggable-window,
+.draggable-window * {
+  user-select: none;       // standard
+  -webkit-user-select: none; // Safari
+  -moz-user-select: none;    // Firefox
+  -ms-user-select: none;     // IE/Edge
+}
 .window-header {
   color: white;
   padding: 10px;
