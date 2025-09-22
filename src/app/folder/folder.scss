@@ -1,0 +1,16 @@
+.folder {
+  position: absolute;
+  background-image: url("../../assets/folder.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  width: 100px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.folder.filled {
+  background-image: url("../../assets/folder_filled.png");
+}

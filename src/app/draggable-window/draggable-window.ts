@@ -1,5 +1,6 @@
 import { Component, ElementRef, Renderer2, ViewChild, AfterViewInit, Input, OnInit } from '@angular/core';
 import {NgOptimizedImage, NgStyle} from '@angular/common';
+import {folderManager} from '../folder_manager';
 
 @Component({
   selector: 'app-draggable-window',
@@ -83,7 +84,6 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   // Called when mouse is released
   onMouseUp(): void {
     this.isDragging = false;
-    // Clean up: Remove the event listeners
     this.mouseMoveListener();
     this.mouseUpListener();
   }

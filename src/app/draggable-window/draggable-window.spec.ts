@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DraggableWindow } from './draggable-window';
+import { DraggableWindowComponent } from './draggable-window';
 
-describe('DraggableWindow', () => {
-  let component: DraggableWindow;
-  let fixture: ComponentFixture<DraggableWindow>;
+describe('DraggableWindowComponent', () => {
+  let component: DraggableWindowComponent;
+  let fixture: ComponentFixture<DraggableWindowComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DraggableWindow]
+      imports: [DraggableWindowComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DraggableWindow);
+    fixture = TestBed.createComponent(DraggableWindowComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
