@@ -13,6 +13,7 @@ export class Folder implements AfterViewInit, OnInit {
   @Input() images: string[] = [];
   @Input() x: number = this.getRandomNumber();         // Initial x position
   @Input() y: number = this.getRandomNumber(50, 500);  // Initial y position
+  @Input() title: string = "Folder"
   @Input() minimized = false;
 
   folderId: number = folderManager.generateId()

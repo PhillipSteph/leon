@@ -85,10 +85,19 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
 
         this.window.nativeElement.style.left = `${event.clientX}px`;
         this.window.nativeElement.style.top = `${event.clientY}px`;
+
+        const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
+        if (header && !this.minimized) {
+          header.style.display = 'none';
+        }
       } else {
         if(!this.minimized){
           this.window.nativeElement.style.width = `${this.width}px`;
           this.window.nativeElement.style.height = `${this.height}px`;
+          const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
+          if (header && !this.minimized) {
+            header.style.display = 'block';
+          }
         }else{
           this.window.nativeElement.style.width = `100px`;
           this.window.nativeElement.style.height = `80px`;
