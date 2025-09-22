@@ -22,7 +22,8 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   @Input() z: number = 1;
   @Input() desc: string = "window";
   @Input() minimized = false;
-
+  private transitionTimeout: any;
+  private currentlyminimized = false;
   private isDragging = false;
   private offsetX = 0;
   private offsetY = 0;
@@ -73,23 +74,36 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   // Called while dragging
   onMouseMove(event: MouseEvent): void {
     if (this.isDragging && this.window) {
+
       const x = event.clientX - this.offsetX;
       const y = event.clientY - this.offsetY;
       this.window.nativeElement.style.left = `${x}px`;
       this.window.nativeElement.style.top = `${y}px`;
 
       if (this.mouseIsOnFolder(event)) {
+        this.window.nativeElement.style.transition = '0.1s';
         // Shrink the window when over a folder
         this.window.nativeElement.style.width = `50px`;
         this.window.nativeElement.style.height = `40px`;
 
-        this.window.nativeElement.style.left = `${event.clientX}px`;
-        this.window.nativeElement.style.top = `${event.clientY}px`;
+        const folderPos = this.getFolderPosition(event);
+
+        const targetX = folderPos ? folderPos.x + 25 : event.clientX;
+        const targetY = folderPos ? folderPos.y + 30 : event.clientY;
+
+        this.window.nativeElement.style.left = `${targetX}px`;
+        this.window.nativeElement.style.top = `${targetY}px`;
 
         const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
         if (header && !this.minimized) {
           header.style.display = 'none';
         }
+        clearTimeout(this.transitionTimeout);
+        this.transitionTimeout = setTimeout(() => {
+          if(this.window) {
+            this.window.nativeElement.style.transition = 'none';
+          }
+        }, 100);
       } else {
         if(!this.minimized){
           this.window.nativeElement.style.width = `${this.width}px`;
@@ -103,7 +117,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
           this.window.nativeElement.style.height = `80px`;
         }
         // Restore original size when not over a folder
-
+        this.currentlyminimized = false;
       }
     }
   }
@@ -118,6 +132,29 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       mouseY > folder.y &&
       mouseY < folder.y + 100
     );
+  }
+  getFolderPosition(event: MouseEvent): { x: number; y: number } | null {
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    // Find all folders under the mouse
+    const foldersUnderMouse = folderManager.folderArray.filter(folder =>
+      mouseX > folder.x &&
+      mouseX < folder.x + 100 &&
+      mouseY > folder.y &&
+      mouseY < folder.y + 100
+    );
+
+    if (foldersUnderMouse.length === 0) {
+      return null; // No folder under mouse
+    }
+
+    // Get the folder with the highest ID
+    const topFolder = foldersUnderMouse.reduce((prev, curr) =>
+      curr.id > prev.id ? curr : prev
+    );
+
+    return { x: topFolder.x, y: topFolder.y };
   }
 
   // Called when mouse is released
