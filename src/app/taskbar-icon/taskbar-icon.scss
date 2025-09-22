@@ -1,8 +1,32 @@
-.icon-container{
+.icon-container {
   width: 50px;
   height: 50px;
   margin: 5px;
   border-radius: 16px;
-  background-color: rgba(204, 204, 204, 0.43);
-  float:left;
+  background-color: rgba(204, 204, 204, 0.2);
+
+  display: flex;              /* enable flexbox */
+  justify-content: center;    /* horizontal center */
+  align-items: center;        /* vertical center */
+  overflow: hidden;           /* in case the letter is too big */
+
+  user-select: none;       // standard
+  -webkit-user-select: none; // Safari
+  -moz-user-select: none;    // Firefox
+  -ms-user-select: none;     // IE/Edge
+}
+
+.icon-container:hover{
+  margin-bottom: 10px;
+  transition: 0.1s;
+  background-color: rgba(204, 204, 204, 0.28);
+
+}
+
+.icon-container h1 {
+  font-family: arial, serif;
+  color: white;
+  margin: 0;                  /* remove default h1 margin */
+  font-size: 40px;          /* adjust size to fit nicely */
+  line-height: 1;             /* avoid extra spacing */
 }

@@ -11,5 +11,16 @@ import {NgStyle} from '@angular/common';
 })
 export class TaskbarIcon {
   @Input() picture: string = "";
+  @Input() letter?: string;
+  @Input() application: any;
 
+  isOpen = false;
+
+  openApplication() {
+    this.isOpen = true;
+  }
+
+  closeApplication() {
+    this.isOpen = false;
+  }
 }

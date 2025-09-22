@@ -1,4 +1,6 @@
-<div class="icon-container" [ngStyle]="{
+<div (click)="openApplication()" class="icon-container" [ngStyle]="{
   'background-image': 'url(' + picture + ')'}">
-
+  @if (letter) {
+    <h1>{{letter}}</h1>
+  }
 </div>
