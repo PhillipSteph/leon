@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
+import {TaskbarIcon} from '../taskbar-icon/taskbar-icon';
 
 @Component({
   selector: 'app-taskbar',
-  imports: [],
+  imports: [
+    TaskbarIcon
+  ],
   templateUrl: './taskbar.html',
   styleUrl: './taskbar.scss'
 })

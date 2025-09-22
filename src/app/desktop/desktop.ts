@@ -46,7 +46,7 @@ export class Desktop implements OnInit {
         x: 800,
         y: 100,
         z: 3,
-        minimized: true
+        minimized: false
       }
     ];
 

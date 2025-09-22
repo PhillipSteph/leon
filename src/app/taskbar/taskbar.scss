@@ -1,4 +1,10 @@
 .taskbar{
+  display: flex;
+  justify-content: center;   /* centers icons horizontally */
+  align-items: center;       /* centers icons vertically */
+
+  padding-left: 50px;
+  padding-right: 50px;
   width: 50%;
   height: 60px;
   position: absolute;
@@ -17,4 +23,9 @@
   border: 1px solid rgba(255, 255, 255, 0.25);
   overflow: hidden;
   z-index: 1000;
+  transition: all 0.3s ease; /* smooth container resize (if needed) */
+}
+
+.taskbar app-taskbar-icon {
+  transition: transform 0.3s ease, margin 0.3s ease;
 }
