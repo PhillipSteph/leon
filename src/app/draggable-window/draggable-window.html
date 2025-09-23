@@ -1,5 +1,5 @@
 <div #window class="draggable-window" [class.minimized]="minimized" (mousedown)="onMouseDown($event)">
-  <div class="window-header" [ngStyle]="{'z-index': picture}">>
+  <div class="window-header" [ngStyle]="{'z-index': picture}">
     <span class="window-title">{{ desc }} </span>
     <button (click)="minimize()" class="minimize">
       <div class="hyphen"></div>

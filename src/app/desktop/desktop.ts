@@ -30,6 +30,8 @@ export class Desktop implements OnInit {
         x: 500,
         y: 150,
         z: 1,
+        width: 700,
+        height: 600,
         minimized: false
       },
       {
@@ -48,6 +50,8 @@ export class Desktop implements OnInit {
         x: 800,
         y: 100,
         z: 3,
+        width: 800,
+        height: 400,
         minimized: false
       }
     ];

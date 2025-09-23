@@ -22,6 +22,10 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   @Input() z: number = 1;
   @Input() desc: string = "window";
   @Input() minimized = false;
+
+  private tempWidth = 0;
+  private tempHeight = 0;
+
   private transitionTimeout: any;
   private isDragging = false;
   private offsetX = 0;
@@ -184,13 +188,32 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
     }
   }
 
+  saveWindowSize() {
+    if(this.window){
+      this.tempHeight = this.window.nativeElement.style.height;
+      this.tempWidth = this.window.nativeElement.style.width;
+    }
+  }
+  applyTempWindowSize() {
+    if(this.window){
+      this.window.nativeElement.style.height = this.tempHeight ;
+      this.window.nativeElement.style.width = this.tempWidth;
+    }
+  }
 
   async minimize() {
     this.minimized = true;
+    this.saveWindowSize();
+
     if (this.window) {
       const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
+      const title = this.window.nativeElement.querySelector('.window-title') as HTMLElement;
+
       if (header) {
         header.style.display = 'none';
+      }
+      if (title) {
+        title.style.display = "none";
       }
 
       this.window.nativeElement.style.transition = `0.5s`;
@@ -209,15 +232,18 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
     this.minimized = false;
     if (this.window) {
       const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
+      const title = this.window.nativeElement.querySelector('.window-title') as HTMLElement;
 
       if (header) {
         header.style.display = 'block';
       }
 
       this.window.nativeElement.style.transition = `0.5s`;
-      this.window.nativeElement.style.width = `500px`;
-      this.window.nativeElement.style.height = `400px`;
+      this.applyTempWindowSize();
       await this.sleep(500);
+      if (title) {
+        title.style.display = 'inline';
+      }
       this.window.nativeElement.style.transition = `0s`;
     }
   }
