@@ -1,7 +1,8 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NgStyle} from '@angular/common';
 import {folderManager} from '../folder_manager';
 import {Browser} from '../applications/browser/browser';
+import {Application} from '../applications/window/window';
 
 @Component({
   selector: 'app-taskbar-icon',
@@ -11,19 +12,30 @@ import {Browser} from '../applications/browser/browser';
   templateUrl: './taskbar-icon.html',
   styleUrl: './taskbar-icon.scss'
 })
-export class TaskbarIcon {
+export class TaskbarIcon implements OnInit{
+
   @Input() picture: string = "";
+  @Input() app!: Application;
   @Input() letter?: string;
-  @Input() application: any;
 
   isOpen = false;
 
   openApplication() {
+    if(this.isOpen) return;
     this.isOpen = true;
-    folderManager.openAppEvent.emit(new Browser())
+    folderManager.openAppEvent.emit(this.app)
   }
+
 
   closeApplication() {
     this.isOpen = false;
+  }
+
+  ngOnInit(): void {
+    folderManager.closeAppEvent.subscribe(removedApp => {
+      if(removedApp === this.app.name){
+        this.closeApplication()
+      }
+    })
   }
 }

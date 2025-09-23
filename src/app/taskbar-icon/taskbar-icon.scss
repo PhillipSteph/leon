@@ -3,7 +3,7 @@
   height: 50px;
   margin: 5px;
   border-radius: 16px;
-  background-color: rgba(204, 204, 204, 0.2);
+  background-color: rgba(230, 230, 230, 0.15);
 
   display: flex;              /* enable flexbox */
   justify-content: center;    /* horizontal center */
@@ -19,7 +19,6 @@
 .icon-container:hover{
   margin-bottom: 10px;
   transition: 0.1s;
-  background-color: rgba(204, 204, 204, 0.28);
 
 }
 

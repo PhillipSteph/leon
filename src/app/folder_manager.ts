@@ -17,6 +17,8 @@ export class folderManager {
   public static openImageEvent: EventEmitter<any> = new EventEmitter();
   public static openAppEvent: EventEmitter<Application> = new EventEmitter();
 
+  public static closeAppEvent: EventEmitter<string> = new EventEmitter();
+
   static folderDroppedEvent: EventEmitter<{ picture: string, folderId: number }> = new EventEmitter();
 
   static generateId(): number {

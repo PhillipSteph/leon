@@ -8,6 +8,7 @@
   cursor: move;
   display: flex;
   flex-direction: column;
+  z-index: 1001;
 }
 
 .draggable-window.minimized{
@@ -60,7 +61,6 @@
   border-bottom-right-radius: 14px;
   border-top: 2px solid #ccc;
   flex-grow: 1;
-  padding-top: 30px;
 }
 
 .window-content.minimized{
@@ -70,7 +70,7 @@
 .window-title {
   font-size: 24px;
   position: relative;
-  z-index: 2;
+  z-index: 1002;
 }
 
 .minimize {
@@ -87,7 +87,7 @@
   background: transparent;
   transition: background 0.3s ease, transform 0.2s ease;
   position: relative;
-  z-index: 3;
+  z-index: 1003;
   align-items: center;
   justify-content: center;
 }

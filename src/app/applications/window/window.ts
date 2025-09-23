@@ -1,5 +1,7 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, Type, ViewChild} from '@angular/core';
+import {folderManager} from '../../folder_manager';
 export interface Application {
+  name: string;
   getComponent(): Type<any>; // Import Type from '@angular/core'
 }
 
@@ -31,6 +33,8 @@ export class WindowComponent implements AfterViewInit, OnInit{
   @Input() x: number = 200;         // Initial x position
   @Input() y: number = 200;         // Initial y position
   @Input() z: number = 1;
+  @Input() app!: Application;
+
   private transitionTimeout: any;
   private isDragging = false;
   private offsetX = 0;
@@ -83,7 +87,7 @@ export class WindowComponent implements AfterViewInit, OnInit{
 
 
   async minimize() {
-
+    folderManager.closeAppEvent.emit(this.app.name);
   }
 
   sleep(ms: number): Promise<void> {

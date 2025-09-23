@@ -10,7 +10,12 @@ import {Application, WindowComponent} from '../window/window';
   styleUrl: './browser.scss'
 })
 export class Browser implements Application{
+  name = "Browser";
   getComponent(): typeof Browser {
     return Browser;
+  }
+
+  getBrowser(){
+    return this;
   }
 }
