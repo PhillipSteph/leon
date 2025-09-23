@@ -1,4 +1,5 @@
 import {EventEmitter} from '@angular/core';
+import {Application} from './applications/window/window';
 
 export class FolderModel {
   constructor(
@@ -14,6 +15,7 @@ export class folderManager {
 
   public static folderArray: FolderModel[] = [];
   public static openImageEvent: EventEmitter<any> = new EventEmitter();
+  public static openAppEvent: EventEmitter<Application> = new EventEmitter();
 
   static folderDroppedEvent: EventEmitter<{ picture: string, folderId: number }> = new EventEmitter();
 

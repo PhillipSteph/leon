@@ -1,5 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {NgStyle} from '@angular/common';
+import {folderManager} from '../folder_manager';
+import {Browser} from '../applications/browser/browser';
 
 @Component({
   selector: 'app-taskbar-icon',
@@ -18,6 +20,7 @@ export class TaskbarIcon {
 
   openApplication() {
     this.isOpen = true;
+    folderManager.openAppEvent.emit(new Browser())
   }
 
   closeApplication() {

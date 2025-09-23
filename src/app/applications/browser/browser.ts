@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {WindowComponent} from '../window/window';
+import {Application, WindowComponent} from '../window/window';
 
 @Component({
   selector: 'app-browser',
@@ -9,6 +9,8 @@ import {WindowComponent} from '../window/window';
   templateUrl: './browser.html',
   styleUrl: './browser.scss'
 })
-export class Browser {
-
+export class Browser implements Application{
+  getComponent(): typeof Browser {
+    return Browser;
+  }
 }

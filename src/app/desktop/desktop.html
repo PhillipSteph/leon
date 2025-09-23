@@ -9,7 +9,9 @@
       [z]="win.z"
       [minimized]="win.minimized">
     </app-draggable-window>
-
+    <ng-container *ngFor="let app of windowsApps">
+      <ng-container *ngComponentOutlet="app.getComponent()"></ng-container>
+    </ng-container>
     <app-folder
     [x]="100"
     [y]="100"

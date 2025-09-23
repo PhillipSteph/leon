@@ -2,8 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {DraggableWindowComponent} from '../draggable-window/draggable-window';
 import {Folder} from '../folder/folder';
 import {folderManager} from '../folder_manager';
-import {NgForOf} from '@angular/common';
+import {NgComponentOutlet, NgForOf} from '@angular/common';
 import {Taskbar} from '../taskbar/taskbar';
+import {Application, WindowComponent} from '../applications/window/window';
 
 @Component({
   selector: 'app-desktop',
@@ -11,7 +12,8 @@ import {Taskbar} from '../taskbar/taskbar';
     DraggableWindowComponent,
     Folder,
     NgForOf,
-    Taskbar
+    Taskbar,
+    NgComponentOutlet
   ],
   standalone: true,
   templateUrl: './desktop.html',
@@ -19,7 +21,7 @@ import {Taskbar} from '../taskbar/taskbar';
 })
 export class Desktop implements OnInit {
   windows: any[] = [];
-
+  windowsApps: Application[] = [];
   ngOnInit(): void {
     this.windows = [
       {
@@ -53,7 +55,9 @@ export class Desktop implements OnInit {
     folderManager.openImageEvent.subscribe(windowData => {
       this.windows.push(windowData);
     });
-
+    folderManager.openAppEvent.subscribe(windowData => {
+      this.windowsApps.push(windowData);
+    });
     folderManager.folderDroppedEvent.subscribe(({ picture, folderId }) => {
       console.log(`Window dropped on folder ${folderId} with image ${picture}`);
       // Remove the window with the same picture from the windows array
