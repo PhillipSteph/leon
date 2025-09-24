@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {Desktop} from './desktop/desktop';
+import {FileSystemManager} from './filesystem/filesystem_manager';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,10 @@ import {Desktop} from './desktop/desktop';
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App {
+export class App implements OnInit{
   protected readonly title = signal('leon');
+
+  ngOnInit(): void {
+    FileSystemManager.init();
+  }
 }

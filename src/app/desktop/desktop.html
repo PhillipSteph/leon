@@ -1,7 +1,7 @@
 <main>
   <div class="desktop">
     <app-draggable-window
-      *ngFor="let win of windows"
+      *ngFor="let win of windowsOnDesktop"
       [desc]="win.desc"
       [picture]="win.picture"
       [x]="win.x"
@@ -14,32 +14,17 @@
     <ng-container class="apps" *ngFor="let app of windowsApps">
       <ng-container *ngComponentOutlet="app.getComponent()"></ng-container>
     </ng-container>
-    <app-folder
-    [x]="100"
-    [y]="100"
-    [title]="'Walter Gropius'"
-    [images]="[
-    {
-      width: 900,
-      height: 650,
-      desc: 'Modernist architecture – Bauhaus Meisterhäuser',
-      picture: 'https://www.ignant.com/wp-content/uploads/2019/01/ignant-architecture-bruno-fioretti-marquez-bauhaus-meisterhauser-3.jpg'
-    },
-    {
-      width: 800,
-      height: 600,
-      desc: 'Exterior of Bauhaus Dessau',
-      picture: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKXlKpk_zz0I88CUb6nPHd1fBUPHhuIxv2ng&s'
-    }
-  ]">
-    </app-folder>
+    <ng-container class="folders" *ngFor="let folder of FileSystemManager.desktop.getAllChildFolders()">
+      <app-folder
+        [x]="getFolderPosition().x"
+        [y]="getFolderPosition().y"
+        [title]="folder.name"
+        [images]="folder.getAllImages()"
+      >
 
-    <app-folder
-      [x]="100"
-      [title]="'Unnamed Folder'"
-      [y]="250"
-    >
-    </app-folder>
+      </app-folder>
+    </ng-container>
+
     <app-taskbar></app-taskbar>
   </div>
 </main>
