@@ -21,10 +21,13 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   @Input() y: number = 200;         // Initial y position
   @Input() z: number = 1;
   @Input() desc: string = "window";
-  @Input() minimized = false;
+  @Input() isMinimized = false;
 
   private tempWidth = 0;
   private tempHeight = 0;
+  private tempLeft = 0;
+  private tempTop = 0;
+  private tempZ = 0;
 
   private transitionTimeout: any;
   private isDragging = false;
@@ -32,6 +35,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   private offsetY = 0;
   private mouseMoveListener: () => void = () => {}; // Mouse move listener
   private mouseUpListener: () => void = () => {};   // Mouse up listener
+  private isFullscreen: boolean = false;
 
   constructor(private renderer: Renderer2) {}
 
@@ -49,7 +53,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       this.window.nativeElement.style.top = `${this.y}px`;
       this.window.nativeElement.style.zIndex = `${this.z}`
     }
-    if(this.minimized){
+    if(this.isMinimized){
       this.minimize();
     }
   }
@@ -70,14 +74,14 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   }
   // Called while dragging
   onMouseMove(event: MouseEvent): void {
-    if (this.isDragging && this.window) {
+    if (this.isDragging && this.window && !this.isFullscreen) {
 
       const x = event.clientX - this.offsetX;
       const y = event.clientY - this.offsetY;
       this.window.nativeElement.style.left = `${x}px`;
       this.window.nativeElement.style.top = `${y}px`;
 
-      if (this.mouseIsOnFolder(event) && this.minimized) {
+      if (this.mouseIsOnFolder(event) && this.isMinimized) {
         this.window.nativeElement.style.transition = '0.1s';
         // Shrink the window when over a folder
         this.window.nativeElement.style.width = `50px`;
@@ -92,7 +96,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
         this.window.nativeElement.style.top = `${targetY}px`;
 
         const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
-        if (header && !this.minimized) {
+        if (header && !this.isMinimized) {
           header.style.display = 'none';
         }
         clearTimeout(this.transitionTimeout);
@@ -102,11 +106,11 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
           }
         }, 100);
       } else {
-        if(!this.minimized){
+        if(!this.isMinimized){
           this.window.nativeElement.style.width = `${this.width}px`;
           this.window.nativeElement.style.height = `${this.height}px`;
           const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
-          if (header && !this.minimized) {
+          if (header && !this.isMinimized) {
             header.style.display = 'block';
           }
         }else{
@@ -188,22 +192,27 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
     }
   }
 
-  saveWindowSize() {
+  saveWindowSizeAndPosition() {
     if(this.window){
       this.tempHeight = this.window.nativeElement.style.height;
       this.tempWidth = this.window.nativeElement.style.width;
+      this.tempLeft = this.window.nativeElement.style.left;
+      this.tempTop = this.window.nativeElement.style.top;
     }
   }
-  applyTempWindowSize() {
+  applyTempWindowSizeAndPosition() {
     if(this.window){
-      this.window.nativeElement.style.height = this.tempHeight ;
+      this.window.nativeElement.style.height = this.tempHeight;
       this.window.nativeElement.style.width = this.tempWidth;
+      this.window.nativeElement.style.left = this.tempLeft;
+      this.window.nativeElement.style.top = this.tempTop;
+      this.window.nativeElement.style.zIndex = this.z;
     }
   }
 
   async minimize() {
-    this.minimized = true;
-    this.saveWindowSize();
+    this.isMinimized = true;
+    this.saveWindowSizeAndPosition();
 
     if (this.window) {
       const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
@@ -225,11 +234,11 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   }
 
   async maximize() {
-    if(!this.minimized){
+    if(!this.isMinimized){
       await this.minimize();
       return;
     }
-    this.minimized = false;
+    this.isMinimized = false;
     if (this.window) {
       const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
       const title = this.window.nativeElement.querySelector('.window-title') as HTMLElement;
@@ -239,7 +248,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       }
 
       this.window.nativeElement.style.transition = `0.5s`;
-      this.applyTempWindowSize();
+      this.applyTempWindowSizeAndPosition();
       await this.sleep(500);
       if (title) {
         title.style.display = 'inline';
@@ -252,7 +261,34 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  fullscreen() {
+  async fullscreen() {
+    if(this.isFullscreen){
+      if(this.window){
+        this.window.nativeElement.style.transition = `0.5s`;
+        this.applyTempWindowSizeAndPosition()
+        await this.sleep(500)
+        this.window.nativeElement.style.transition = `0s`;
+      }
+      this.isFullscreen = false;
+      return;
+    }
+    this.isFullscreen = true;
+    this.saveWindowSizeAndPosition();
 
+    if (this.window) {
+      const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
+
+      if (header) {
+
+      }
+      this.window.nativeElement.style.transition = `0.5s`;
+      this.window.nativeElement.style.zIndex = `10000`;
+      this.window.nativeElement.style.width = `calc(100% - 30px)`;
+      this.window.nativeElement.style.height = `calc(100% - 30px)`;
+      this.window.nativeElement.style.left = `15px`;
+      this.window.nativeElement.style.top = `15px`;
+      await this.sleep(500);
+      this.window.nativeElement.style.transition = `0s`;
+    }
   }
 }
