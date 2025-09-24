@@ -2,6 +2,13 @@ import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@a
 import {NgStyle} from '@angular/common';
 import {folderManager} from '../folder_manager';
 
+export interface FolderImage {
+  width: number;
+  height: number;
+  desc: string;
+  picture: string; // URL
+}
+
 @Component({
   selector: 'app-folder',
   templateUrl: './folder.html',
@@ -10,7 +17,8 @@ import {folderManager} from '../folder_manager';
 
 export class Folder implements AfterViewInit, OnInit {
   @ViewChild('window', { static: false }) window!: ElementRef;
-  @Input() images: string[] = [];
+  @Input() images: FolderImage[] = [];
+
   @Input() x: number = this.getRandomNumber();         // Initial x position
   @Input() y: number = this.getRandomNumber(50, 500);  // Initial y position
   @Input() title: string = "Folder"
@@ -21,9 +29,9 @@ export class Folder implements AfterViewInit, OnInit {
   ngOnInit(): void {
     folderManager.registerFolder(this.x,this.y,this.folderId, this.images)
 
-    folderManager.folderDroppedEvent.subscribe(({ picture, folderId }) => {
+    folderManager.folderDroppedEvent.subscribe(({ picture, width, height, desc, folderId }) => {
       if(folderId === this.folderId){
-        this.images.push(picture);
+        this.images.push({picture, width, height, desc});
       }
     });
   }

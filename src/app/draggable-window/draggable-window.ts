@@ -80,6 +80,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       const y = event.clientY - this.offsetY;
       this.window.nativeElement.style.left = `${x}px`;
       this.window.nativeElement.style.top = `${y}px`;
+      this.window.nativeElement.style.zIndex = `9999`
 
       if (this.mouseIsOnFolder(event) && this.isMinimized) {
         this.window.nativeElement.style.transition = '0.1s';
@@ -166,7 +167,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
 
     const mouseX = event.clientX;
     const mouseY = event.clientY;
-
+    this.applyTempWindowSizeAndPosition(true);
     // Find all folders under the mouse
     const targetFolders = folderManager.folderArray.filter(folder =>
       mouseX >= folder.x &&
@@ -182,11 +183,14 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       );
 
       // Push the image into the folder
-      targetFolder.images.push(this.picture);
+      targetFolder.images.push({desc: this.desc, height: this.height, picture: this.picture, width: this.width});
 
       // Emit event for DesktopComponent
       folderManager.folderDroppedEvent.emit({
         picture: this.picture,
+        width: this.width,
+        height: this.height,
+        desc: this.desc,
         folderId: targetFolder.id
       });
     }
@@ -200,7 +204,11 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       this.tempTop = this.window.nativeElement.style.top;
     }
   }
-  applyTempWindowSizeAndPosition() {
+  applyTempWindowSizeAndPosition(onlyz?: boolean) {
+    if(onlyz){
+      this.window.nativeElement.style.zIndex = this.z;
+      return;
+    }
     if(this.window){
       this.window.nativeElement.style.height = this.tempHeight;
       this.window.nativeElement.style.width = this.tempWidth;

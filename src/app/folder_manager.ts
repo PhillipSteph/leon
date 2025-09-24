@@ -1,12 +1,13 @@
 import {EventEmitter} from '@angular/core';
 import {Application} from './applications/window/window';
+import {FolderImage} from './folder/folder';
 
 export class FolderModel {
   constructor(
     public id: number,
     public x: number,
     public y: number,
-    public images: string[]
+    public images: FolderImage[]
   ) {}
 }
 
@@ -19,13 +20,13 @@ export class folderManager {
 
   public static closeAppEvent: EventEmitter<string> = new EventEmitter();
 
-  static folderDroppedEvent: EventEmitter<{ picture: string, folderId: number }> = new EventEmitter();
+  static folderDroppedEvent: EventEmitter<{ picture: string, width: number, height: number, desc: string, folderId: number }> = new EventEmitter();
 
   static generateId(): number {
     return folderManager.idCounter++;
   }
 
-  static registerFolder(x: number, y: number, folderId: number, images: string[]): void {
+  static registerFolder(x: number, y: number, folderId: number, images: FolderImage[]): void {
     const exists = this.folderArray.some(folder => folder.id === folderId);
     if (exists) {
       console.log(`Folder with id ${folderId} already exists.`);
@@ -41,17 +42,19 @@ export class folderManager {
   }
 
 
-  static openImages(folderId: number, images: string[], x: number, y: number) {
+  static openImages(folderId: number, images: FolderImage[], x: number, y: number) {
     x+= 70;
     y+= 70;
     let zCounter: number = this.idCounter;
-    images.forEach((imgUrl, index) => {
+    images.forEach((image, index) => {
       const windowData = {
-        desc: `Bild ${index + 1}`,
-        picture: imgUrl,
+        desc: image.desc,
+        picture: image.picture,
         x: (x += 20),
         y: (y += 20),
         z: zCounter++,
+        width: image.width,
+        height: image.height,
         minimized: true
       };
       this.openImageEvent.emit(windowData);
