@@ -11,6 +11,7 @@ import {folderManager} from '../folder_manager';
   ],
   styleUrls: ['draggable-window.scss']
 })
+//TODO: Komplettes Refactoring: Images, Folders zentralisiert, keine Parameter rumgabe, sondern immer das Objekt!!
 export class DraggableWindowComponent implements AfterViewInit, OnInit {
   @ViewChild('window', { static: false }) window!: ElementRef;
 
