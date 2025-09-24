@@ -252,4 +252,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  fullscreen() {
+
+  }
 }

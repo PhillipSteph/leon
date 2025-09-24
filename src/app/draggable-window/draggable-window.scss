@@ -29,13 +29,6 @@
   border-top-right-radius: 14px;
   cursor: grab;
   height: 30px;
-  background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.05) 0%,
-      rgba(255, 255, 255, 0.15) 100%
-  );
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
   overflow: hidden;
   position: relative;
 }
@@ -48,11 +41,17 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: inherit;
-  backdrop-filter: inherit;
-  -webkit-backdrop-filter: inherit;
+  background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.25) 100%
+  );
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   border-radius: inherit;
-  mask: radial-gradient(circle at calc(100% - 28px) 50%, transparent 18px, black 19px);
+  mask: radial-gradient(circle at calc(100% - 28px) 50%, transparent 18px, black 19px),
+  radial-gradient(circle at calc(100% - 76px) 50%, transparent 18px, black 19px);
+  mask-composite: intersect;
 }
 
 .window-content {
@@ -76,6 +75,25 @@
 .minimize {
   float: right;
   margin-top: -4px;
+  margin-right: 10px;
+  border: 2px solid #ccc;
+  border-radius: 1000px;
+  font-size: 16px;
+  height: 38px;
+  width: 38px;
+  padding: 4px 8px;
+  color: white;
+  background: transparent;
+  transition: background 0.3s ease, transform 0.2s ease;
+  position: relative;
+  z-index: 3;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullscreen {
+  float: right;
+  margin-top: -4px;
   margin-right: -1px;
   border: 2px solid #ccc;
   border-radius: 1000px;
@@ -95,10 +113,28 @@
 .minimize:hover{
   border: 2px solid #ececec;
   transition: 0.3s;
+  cursor: pointer;
 
   .hyphen{
     border: 2px solid rgb(255, 255, 255);
     transition: 0.3s;
+  }
+}
+
+.fullscreen:hover{
+  border: 2px solid #ececec;
+  transition: 0.3s;
+  cursor: pointer;
+
+
+  .plus::before,
+  .plus::after {
+    content: '';
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 1px 1px rgba(0, 0, 0, 0.15);
+    transition: 0.3s;
+
   }
 }
 .hyphen{
@@ -106,4 +142,33 @@
   height: 0px;
   border: 2px solid rgba(255, 255, 255, 0.5);
   box-shadow: rgba(0, 0, 0, 0.15) 1px 1px;
+}
+.plus {
+  position: relative;
+  width: 18px;
+  height: 18px;
+}
+
+.plus::before,
+.plus::after {
+  content: '';
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 1px 1px rgba(0, 0, 0, 0.15);
+}
+
+.plus::before {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  transform: translateY(-50%);
+}
+
+.plus::after {
+  top: 0;
+  left: 50%;
+  width: 3px;
+  height: 100%;
+  transform: translateX(-50%);
 }

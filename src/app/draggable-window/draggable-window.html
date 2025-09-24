@@ -1,10 +1,15 @@
 <div #window class="draggable-window" [class.minimized]="minimized" (mousedown)="onMouseDown($event)">
   <div class="window-header" [ngStyle]="{'z-index': picture}">
     <span class="window-title">{{ desc }} </span>
+    <button (click)="fullscreen()" class="fullscreen">
+      <div class="plus"></div>
+    </button>
+
     <button (click)="minimize()" class="minimize">
       <div class="hyphen"></div>
     </button>
   </div>
+
   <div class="window-content" [class.minimized]="minimized" (dblclick)="maximize()" [ngStyle]="{
   'background-image': 'url(' + picture + ')',
   'background-size': 'cover',
