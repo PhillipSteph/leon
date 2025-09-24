@@ -10,11 +10,8 @@
     </button>
   </div>
 
-  <div #img class="window-content" [class.minimized]="isMinimized" (dblclick)="maximize()" [ngStyle]="{
-  'background-image': 'url(' + picture + ')',
-  'background-size': 'cover',
-  'background-position': 'center',
-  'background-repeat': 'no-repeat'
+  <div class="window-content" [class.minimized]="isMinimized" (dblclick)="maximize()" [ngStyle]="{
+  'background-image': 'url(' + picture + ')'
 }">
     <!-- The image is now handled by CSS background dynamically -->
   </div>

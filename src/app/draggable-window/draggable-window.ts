@@ -211,6 +211,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   }
 
   async minimize() {
+    if(this.isFullscreen) return;
     this.isMinimized = true;
     this.saveWindowSizeAndPosition();
 
@@ -262,13 +263,24 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   }
 
   async fullscreen() {
+    const content = this.window.nativeElement.querySelector('.window-content') as HTMLElement;
+    const minimize = this.window.nativeElement.querySelector('.minimize') as HTMLElement;
+
     if(this.isFullscreen){
       if(this.window){
         this.window.nativeElement.style.transition = `0.5s`;
         this.applyTempWindowSizeAndPosition()
-        await this.sleep(500)
+        minimize.style.background = 'transparent';
+
+        await this.sleep(450)
+
+        if (content) {
+          content.style.backgroundSize = 'cover';
+        }
+        await this.sleep(50)
         this.window.nativeElement.style.transition = `0s`;
       }
+
       this.isFullscreen = false;
       return;
     }
@@ -276,17 +288,18 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
     this.saveWindowSizeAndPosition();
 
     if (this.window) {
-      const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
-
-      if (header) {
-
+      if (content) {
+        content.style.backgroundSize = 'contain';
       }
+
       this.window.nativeElement.style.transition = `0.5s`;
       this.window.nativeElement.style.zIndex = `10000`;
       this.window.nativeElement.style.width = `calc(100% - 30px)`;
       this.window.nativeElement.style.height = `calc(100% - 30px)`;
       this.window.nativeElement.style.left = `15px`;
       this.window.nativeElement.style.top = `15px`;
+
+      minimize.style.background = '#ccc';
       await this.sleep(500);
       this.window.nativeElement.style.transition = `0s`;
     }

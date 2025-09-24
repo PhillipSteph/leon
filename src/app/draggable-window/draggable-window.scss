@@ -60,6 +60,12 @@
   border-top: 2px solid #ccc;
   flex-grow: 1;
   padding-top: 30px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  transition: 0.5s;
 }
 
 .window-content.minimized{
