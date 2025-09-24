@@ -38,18 +38,28 @@ export class FileSystemManager {
         picture: 'https://galeriemontblanc.com/cdn/shop/files/Vue_avion_013e0d87-25db-4d3b-85ed-4852004f944d.jpg?v=1731891831',
         width: 700,
         height: 600,
+        x: 100,
+        y: 100,
+        z: 10,
       },
       {
         desc: 'Bild2 - Leon Stephan - 2022',
         picture: 'https://arthive.com/res/media/img/oy1000/work/93b/623482@2x.jpg',
         width: 500,
         height: 600,
+        x: 200,
+        y: 100,
+        z: 10,
       },
       {
         desc: 'Bild1 - Leon Stephan - 2024',
         picture: 'https://www.kunstloft.at/magazin/wp-content/uploads/2023/05/AdobeStock_542915248-scaled-1-2000x889.jpeg',
         width: 800,
         height: 400,
+        x: 300,
+        y: 100,
+        z: 10,
+        minimized: false
       }
     ])
     this.desktop.addChildFolder(new Folder("walter_gropius", 250, 200, this.desktop, undefined, [

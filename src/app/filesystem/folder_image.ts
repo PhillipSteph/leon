@@ -3,4 +3,8 @@ export interface FolderImage {
   height: number;
   desc: string;
   picture: string; // URL
+  x?: number;
+  y?: number;
+  z?: number;
+  minimized?: boolean;
 }

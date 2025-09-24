@@ -29,7 +29,6 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   private tempHeight = 0;
   private tempLeft = 0;
   private tempTop = 0;
-  private tempZ = 0;
 
   private transitionTimeout: any;
   private isDragging = false;
@@ -171,6 +170,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
     const mouseY = event.clientY;
     this.applyTempWindowSizeAndPosition(true);
     // Find all folders under the mouse
+    if(!this.isMinimized) return;
     const targetFolders = FileSystemManager.getDesktopFolders().filter(folder =>
       mouseX >= folder.x &&
       mouseX <= folder.x + 100 &&

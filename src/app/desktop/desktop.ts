@@ -21,56 +21,19 @@ import {FileSystemManager} from '../filesystem/filesystem_manager';
   styleUrl: './desktop.scss'
 })
 export class Desktop implements OnInit {
-  windowsOnDesktop: any[] = [];
   windowsApps: Application[] = [];
-  initialFolderX: number = 100;
-  initialFolderY: number = 100;
-  maxX: number = 800;
-  maxY: number = 400;
-  addClock: boolean = false;
     ngOnInit(): void {
-      this.windowsOnDesktop = [
-        {
-          desc: 'Bild7 - Leon Stephan - 2021',
-          picture: 'https://galeriemontblanc.com/cdn/shop/files/Vue_avion_013e0d87-25db-4d3b-85ed-4852004f944d.jpg?v=1731891831',
-          x: 500,
-          y: 150,
-          z: 1,
-          width: 700,
-          height: 600,
-          minimized: false
-        },
-        {
-          desc: 'Bild2 - Leon Stephan - 2022',
-          picture: 'https://arthive.com/res/media/img/oy1000/work/93b/623482@2x.jpg',
-          x: 200,
-          y: 200,
-          z: 2,
-          width: 500,
-          height: 600,
-          minimized: false
-        },
-        {
-          desc: 'Bild1 - Leon Stephan - 2024',
-          picture: 'https://www.kunstloft.at/magazin/wp-content/uploads/2023/05/AdobeStock_542915248-scaled-1-2000x889.jpeg',
-          x: 800,
-          y: 100,
-          z: 3,
-          width: 800,
-          height: 400,
-          minimized: false
-        }
-      ];
 
       EventManager.openImageEvent.subscribe(data => {
-        this.windowsOnDesktop.push({
+        FileSystemManager.desktop.addImage({
+
           desc: data.image.desc,
           picture: data.image.picture,
+          width: data.image.width,
+          height: data.image.height,
           x: data.x,
           y: data.y,
           z: data.z,
-          width: data.image.width,
-          height: data.image.height,
           minimized: data.minimized
         });
       });
@@ -80,7 +43,7 @@ export class Desktop implements OnInit {
       EventManager.folderDroppedEvent.subscribe(({ image, folderId }) => {
         console.log(`Window dropped on folder ${folderId} with image ${image.picture}`);
         // Remove the window with the same picture from the windows array
-        this.windowsOnDesktop = this.windowsOnDesktop.filter(win => win.picture !== image.picture);
+        FileSystemManager.desktop.images = FileSystemManager.desktop.images.filter(win => win.picture !== image.picture);
       });
       EventManager.closeAppEvent.subscribe(removedApp => {
         this.windowsApps = this.windowsApps.filter(win => win.name !== removedApp);

@@ -1,15 +1,15 @@
 <main>
   <div class="desktop">
     <app-draggable-window
-      *ngFor="let win of windowsOnDesktop"
+      *ngFor="let win of FileSystemManager.desktop.getAllImages()"
       [desc]="win.desc"
       [picture]="win.picture"
-      [x]="win.x"
-      [y]="win.y"
+      [x]="win.x ? win.x : 100"
+      [y]="win.y ? win.y : 100"
       [width]="win.width"
       [height]="win.height"
-      [z]="win.z"
-      [isMinimized]="win.minimized">
+      [z]="win.z ? win.z : 10"
+      [isMinimized]="(win.minimized != undefined) ? win.minimized : true">
     </app-draggable-window>
     <ng-container class="apps" *ngFor="let app of windowsApps">
       <ng-container *ngComponentOutlet="app.getComponent()"></ng-container>
