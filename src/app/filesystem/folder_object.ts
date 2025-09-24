@@ -1,25 +1,57 @@
-import {FolderImage} from '../folder/folder';
+import {FolderImage} from './folder_image';
+import {FileSystemManager} from './filesystem_manager';
 
 export class Folder {
-  private parentFolder?: Folder;
-  private childFolders: Folder[] = [];
-  private images: FolderImage[] = [];
+  id: number;
   name: string = "";
+  x: number = 100;
+  y: number = 100;
 
-  constructor(name: string, parentFolder?: Folder, childFolders?: Folder[], images?: FolderImage[]) {
+  parentFolder?: Folder;
+  childFolders: Folder[] = [];
+  images: FolderImage[] = [];
+
+  constructor(
+    name: string,
+    x?: number,
+    y?: number,
+    parentFolder?: Folder,
+    childFolders?: Folder[],
+    images?: FolderImage[]
+  ) {
+    this.id = FileSystemManager.generateId();
     this.name = name;
+    if (x) this.x = x;
+    if (y) this.y = y;
     this.parentFolder = parentFolder;
-    if(childFolders) this.childFolders = childFolders;
-    if(images) this.images = images;
+    if (childFolders) this.childFolders = childFolders;
+    if (images) this.images = images;
+  }
+
+  isFilled(): boolean {
+    return this.images.length > 0;
   }
 
   addImage(image: FolderImage): void {
+    if(this.hasImage(image)) return;
+
+    console.log("image added to "+this.name)
     this.images.push(image);
+    console.log(this.name+" contains: "+this.images);
   }
   addImages(images: FolderImage[]): void {
     this.images = this.images.concat(images)
   }
 
+  hasImage(image: FolderImage): boolean {
+    let retValue = false;
+    this.images.forEach((imagefe: FolderImage) => {
+      if(imagefe.desc == image.desc && imagefe.picture == imagefe.picture){
+        retValue = true
+      }
+    })
+    return retValue;
+  }
   removeImageByPicture(picture: string): boolean {
     const index = this.images.findIndex(img => img.picture === picture);
     if (index !== -1) {

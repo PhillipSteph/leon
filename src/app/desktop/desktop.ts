@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DraggableWindowComponent} from '../draggable-window/draggable-window';
-import {Folder} from '../folder/folder';
-import {folderManager} from '../folder_manager';
+import {FolderComponent} from '../folder/folder.component';
+import {EventManager} from '../filesystem/event_manager';
 import {NgComponentOutlet, NgForOf} from '@angular/common';
 import {Taskbar} from '../taskbar/taskbar';
 import {Application, WindowComponent} from '../applications/window/window';
@@ -11,7 +11,7 @@ import {FileSystemManager} from '../filesystem/filesystem_manager';
   selector: 'app-desktop',
   imports: [
     DraggableWindowComponent,
-    Folder,
+    FolderComponent,
     NgForOf,
     Taskbar,
     NgComponentOutlet
@@ -62,34 +62,30 @@ export class Desktop implements OnInit {
         }
       ];
 
-      folderManager.openImageEvent.subscribe(windowData => {
-        this.windowsOnDesktop.push(windowData);
+      EventManager.openImageEvent.subscribe(data => {
+        this.windowsOnDesktop.push({
+          desc: data.image.desc,
+          picture: data.image.picture,
+          x: data.x,
+          y: data.y,
+          z: data.z,
+          width: data.image.width,
+          height: data.image.height,
+          minimized: data.minimized
+        });
       });
-      folderManager.openAppEvent.subscribe(windowData => {
+      EventManager.openAppEvent.subscribe(windowData => {
         this.windowsApps.push(windowData);
       });
-      folderManager.folderDroppedEvent.subscribe(({ picture, folderId }) => {
-        console.log(`Window dropped on folder ${folderId} with image ${picture}`);
+      EventManager.folderDroppedEvent.subscribe(({ image, folderId }) => {
+        console.log(`Window dropped on folder ${folderId} with image ${image.picture}`);
         // Remove the window with the same picture from the windows array
-        this.windowsOnDesktop = this.windowsOnDesktop.filter(win => win.picture !== picture);
+        this.windowsOnDesktop = this.windowsOnDesktop.filter(win => win.picture !== image.picture);
       });
-      folderManager.closeAppEvent.subscribe(removedApp => {
+      EventManager.closeAppEvent.subscribe(removedApp => {
         this.windowsApps = this.windowsApps.filter(win => win.name !== removedApp);
       })
 
-    }
-    getFolderPosition(): { x: number; y: number }{
-      if(this.addClock){
-        this.addClock = !this.addClock;
-        if(this.initialFolderY>(this.maxY-100)){
-          this.initialFolderY = 0;
-          this.initialFolderX += 100;
-        }else{
-          this.initialFolderY += 100;
-        }
-      }
-
-      return {x: this.initialFolderX, y: this.initialFolderY};
     }
   protected readonly FileSystemManager = FileSystemManager;
 }

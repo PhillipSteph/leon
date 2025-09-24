@@ -1,6 +1,7 @@
 import { Component, ElementRef, Renderer2, ViewChild, AfterViewInit, Input, OnInit } from '@angular/core';
 import {NgOptimizedImage, NgStyle} from '@angular/common';
-import {folderManager} from '../folder_manager';
+import {EventManager} from '../filesystem/event_manager';
+import {FileSystemManager} from '../filesystem/filesystem_manager';
 
 @Component({
   selector: 'app-draggable-window',
@@ -41,7 +42,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   constructor(private renderer: Renderer2) {}
 
   ngOnInit(): void {
-    console.log(`Initial values: x=${this.x}, y=${this.y}, width=${this.width}, height=${this.height}`);
+    console.log(` Initial values: x=${this.x}, y=${this.y}, width=${this.width}, height=${this.height}`);
     this.z = this.z * 2;
   }
 
@@ -127,7 +128,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
     const mouseX = event.clientX;
     const mouseY = event.clientY;
 
-    return folderManager.folderArray.some(folder =>
+    return FileSystemManager.getDesktopFolders().some(folder =>
       mouseX > folder.x &&
       mouseX < folder.x + 100 &&
       mouseY > folder.y &&
@@ -139,7 +140,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
     const mouseY = event.clientY;
 
     // Find all folders under the mouse
-    const foldersUnderMouse = folderManager.folderArray.filter(folder =>
+    const foldersUnderMouse = FileSystemManager.getDesktopFolders().filter(folder =>
       mouseX > folder.x &&
       mouseX < folder.x + 100 &&
       mouseY > folder.y &&
@@ -170,7 +171,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
     const mouseY = event.clientY;
     this.applyTempWindowSizeAndPosition(true);
     // Find all folders under the mouse
-    const targetFolders = folderManager.folderArray.filter(folder =>
+    const targetFolders = FileSystemManager.getDesktopFolders().filter(folder =>
       mouseX >= folder.x &&
       mouseX <= folder.x + 100 &&
       mouseY >= folder.y &&
@@ -182,16 +183,14 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       const targetFolder = targetFolders.reduce((a, b) =>
         a.id > b.id ? a : b
       );
-
-      // Push the image into the folder
-      targetFolder.images.push({desc: this.desc, height: this.height, picture: this.picture, width: this.width});
-
       // Emit event for DesktopComponent
-      folderManager.folderDroppedEvent.emit({
-        picture: this.picture,
-        width: this.width,
-        height: this.height,
-        desc: this.desc,
+      EventManager.folderDroppedEvent.emit({
+        image: {
+          picture: this.picture,
+          width: this.width,
+          height: this.height,
+          desc: this.desc,
+        },
         folderId: targetFolder.id
       });
     }

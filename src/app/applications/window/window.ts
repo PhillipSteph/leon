@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, Type, ViewChild} from '@angular/core';
-import {folderManager} from '../../folder_manager';
+import {EventManager} from '../../filesystem/event_manager';
 export interface Application {
   name: string;
   getComponent(): Type<any>; // Import Type from '@angular/core'
@@ -87,7 +87,7 @@ export class WindowComponent implements AfterViewInit, OnInit{
 
 
   async minimize() {
-    folderManager.closeAppEvent.emit(this.app.name);
+    EventManager.closeAppEvent.emit(this.app.name);
   }
 
   sleep(ms: number): Promise<void> {

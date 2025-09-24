@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgStyle} from '@angular/common';
-import {folderManager} from '../folder_manager';
+import {EventManager} from '../filesystem/event_manager';
 import {Browser} from '../applications/browser/browser';
 import {Application} from '../applications/window/window';
 
@@ -23,7 +23,7 @@ export class TaskbarIcon implements OnInit{
   openApplication() {
     if(this.isOpen) return;
     this.isOpen = true;
-    folderManager.openAppEvent.emit(this.app)
+    EventManager.openAppEvent.emit(this.app)
   }
 
 
@@ -32,7 +32,7 @@ export class TaskbarIcon implements OnInit{
   }
 
   ngOnInit(): void {
-    folderManager.closeAppEvent.subscribe(removedApp => {
+    EventManager.closeAppEvent.subscribe(removedApp => {
       if(removedApp === this.app.name){
         this.closeApplication()
       }

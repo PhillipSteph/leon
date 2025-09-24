@@ -16,10 +16,11 @@
     </ng-container>
     <ng-container class="folders" *ngFor="let folder of FileSystemManager.desktop.getAllChildFolders()">
       <app-folder
-        [x]="getFolderPosition().x"
-        [y]="getFolderPosition().y"
-        [title]="folder.name"
-        [images]="folder.getAllImages()"
+        [x]="folder.x"
+        [y]="folder.y"
+        [name]="folder.name"
+        [filled]="folder.isFilled()"
+        [id]="folder.id"
       >
 
       </app-folder>
