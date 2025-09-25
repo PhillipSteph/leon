@@ -36,7 +36,7 @@ export class WindowComponent implements AfterViewInit, OnInit{
   @Input() height: number = 560;  // Default height
   @Input() x: number = 200;         // Initial x position
   @Input() y: number = 200;         // Initial y position
-  @Input() z: number = 1;
+  @Input() z: number = DraggableWindowComponent.mouseDownCounter + 1;
   @Input() app!: Application;
 
   private tempWidth = 0;
@@ -79,8 +79,8 @@ export class WindowComponent implements AfterViewInit, OnInit{
           }
         }
     })
-    EventManager.reOpenAppEvent.subscribe(removedApp => {
-      if(removedApp.name == this.desc) {
+    EventManager.reOpenAppEvent.subscribe(app => {
+      if(app.name == this.desc) {
         if (this.window) {
           this.applyTempWindowSizeAndPosition()
           this.window.nativeElement.style.display = `flex`;

@@ -251,7 +251,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
       const title = this.window.nativeElement.querySelector('.window-title') as HTMLElement;
 
-      this.window.nativeElement.style.zIndex = DraggableWindowComponent.mouseDownCounter;
+      this.window.nativeElement.style.zIndex = DraggableWindowComponent.mouseDownCounter++;
 
       if (header) {
         header.style.display = 'block';
