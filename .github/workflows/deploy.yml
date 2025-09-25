@@ -31,5 +31,5 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/your-project-name
+          local-dir: ./dist/leon/browser/
           server-dir: ${{ secrets.FTP_TARGET_DIR }}
