@@ -62,6 +62,20 @@ export class WindowComponent implements AfterViewInit, OnInit{
       this.window.nativeElement.style.top = `${this.y}px`;
       this.window.nativeElement.style.zIndex = `${this.z}`
     }
+    EventManager.closeAppEvent.subscribe(removedApp => {
+        if(removedApp == this.desc) {
+          if (this.window) {
+            this.window.nativeElement.style.display = `none`;
+          }
+        }
+    })
+    EventManager.reOpenAppEvent.subscribe(removedApp => {
+      if(removedApp.name == this.desc) {
+        if (this.window) {
+          this.window.nativeElement.style.display = `flex`;
+        }
+      }
+    })
   }
 
   // Called when mouse is pressed down
@@ -99,6 +113,10 @@ export class WindowComponent implements AfterViewInit, OnInit{
 
 
   async minimize() {
+    if(this.isFullscreen) {
+      this.fullscreen();
+      return;
+    }
     EventManager.closeAppEvent.emit(this.app.name);
   }
 
@@ -111,13 +129,11 @@ export class WindowComponent implements AfterViewInit, OnInit{
 
   async fullscreen() {
     const content = this.window.nativeElement.querySelector('.window-content') as HTMLElement;
-    const minimize = this.window.nativeElement.querySelector('.minimize') as HTMLElement;
 
     if(this.isFullscreen){
       if(this.window){
         this.window.nativeElement.style.transition = `0.5s`;
         this.applyTempWindowSizeAndPosition()
-        minimize.style.background = 'transparent';
 
         await this.sleep(450)
 
@@ -142,7 +158,6 @@ export class WindowComponent implements AfterViewInit, OnInit{
       this.window.nativeElement.style.left = `15px`;
       this.window.nativeElement.style.top = `15px`;
 
-      minimize.style.background = '#ccc';
       await this.sleep(500);
       this.window.nativeElement.style.transition = `0s`;
     }

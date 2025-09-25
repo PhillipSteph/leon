@@ -45,10 +45,6 @@ export class Desktop implements OnInit {
         // Remove the window with the same picture from the windows array
         FileSystemManager.desktop.images = FileSystemManager.desktop.images.filter(win => win.picture !== image.picture);
       });
-      EventManager.closeAppEvent.subscribe(removedApp => {
-        this.windowsApps = this.windowsApps.filter(win => win.name !== removedApp);
-      })
-
     }
   protected readonly FileSystemManager = FileSystemManager;
 }

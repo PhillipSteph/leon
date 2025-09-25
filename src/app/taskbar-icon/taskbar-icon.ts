@@ -19,11 +19,15 @@ export class TaskbarIcon implements OnInit{
   @Input() letter?: string;
 
   isOpen = false;
-
+  firstTime = true;
   openApplication() {
     if(this.isOpen) return;
     this.isOpen = true;
-    EventManager.openAppEvent.emit(this.app)
+    if(this.firstTime) {
+      EventManager.openAppEvent.emit(this.app)
+      this.firstTime = false;
+    }
+    else EventManager.reOpenAppEvent.emit(this.app)
   }
 
 
