@@ -1,0 +1,35 @@
+# .github/workflows/deploy.yml
+
+name: Build and Deploy Angular via FTP
+
+on:
+  push:
+    branches: [ main ]  # or your chosen branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Angular App
+        run: npm run build --configuration=production
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/your-project-name
+          server-dir: ${{ secrets.FTP_TARGET_DIR }}
