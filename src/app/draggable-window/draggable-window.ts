@@ -38,11 +38,11 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
   private mouseUpListener: () => void = () => {};   // Mouse up listener
   private isFullscreen: boolean = false;
 
+
   constructor(private renderer: Renderer2) {}
 
   ngOnInit(): void {
     console.log(` Initial values: x=${this.x}, y=${this.y}, width=${this.width}, height=${this.height}`);
-    this.z = this.z * 2;
   }
 
   ngAfterViewInit(): void {
@@ -58,6 +58,7 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       this.minimize();
     }
   }
+  static mouseDownCounter = 11;
 
   // Called when mouse is pressed down
   onMouseDown(event: MouseEvent): void {
@@ -69,6 +70,8 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       // Listen to mousemove and mouseup events
       this.mouseMoveListener = this.renderer.listen('document', 'mousemove', this.onMouseMove.bind(this));
       this.mouseUpListener = this.renderer.listen('document', 'mouseup', this.onMouseUp.bind(this));
+      this.window.nativeElement.style.zIndex = DraggableWindowComponent.mouseDownCounter++;
+
     } else {
       console.error('Window reference is not available');
     }
@@ -81,7 +84,6 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       const y = event.clientY - this.offsetY;
       this.window.nativeElement.style.left = `${x}px`;
       this.window.nativeElement.style.top = `${y}px`;
-      this.window.nativeElement.style.zIndex = `9999`
 
       if (this.mouseIsOnFolder(event) && this.isMinimized) {
         this.window.nativeElement.style.transition = '0.1s';
@@ -168,7 +170,6 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
 
     const mouseX = event.clientX;
     const mouseY = event.clientY;
-    this.applyTempWindowSizeAndPosition(true);
     // Find all folders under the mouse
     if(!this.isMinimized) return;
     const targetFolders = FileSystemManager.getDesktopFolders().filter(folder =>
@@ -204,17 +205,12 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
       this.tempTop = this.window.nativeElement.style.top;
     }
   }
-  applyTempWindowSizeAndPosition(onlyz?: boolean) {
-    if(onlyz){
-      this.window.nativeElement.style.zIndex = this.z;
-      return;
-    }
+  applyTempWindowSizeAndPosition() {
     if(this.window){
       this.window.nativeElement.style.height = this.tempHeight;
       this.window.nativeElement.style.width = this.tempWidth;
       this.window.nativeElement.style.left = this.tempLeft;
       this.window.nativeElement.style.top = this.tempTop;
-      this.window.nativeElement.style.zIndex = this.z;
     }
   }
 
@@ -251,6 +247,8 @@ export class DraggableWindowComponent implements AfterViewInit, OnInit {
     if (this.window) {
       const header = this.window.nativeElement.querySelector('.window-header') as HTMLElement;
       const title = this.window.nativeElement.querySelector('.window-title') as HTMLElement;
+
+      this.window.nativeElement.style.zIndex = DraggableWindowComponent.mouseDownCounter;
 
       if (header) {
         header.style.display = 'block';
