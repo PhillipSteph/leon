@@ -62,9 +62,19 @@ export class WindowComponent implements AfterViewInit, OnInit{
       this.window.nativeElement.style.top = `${this.y}px`;
       this.window.nativeElement.style.zIndex = `${this.z}`
     }
-    EventManager.closeAppEvent.subscribe(removedApp => {
+    EventManager.closeAppEvent.subscribe(async removedApp => {
         if(removedApp == this.desc) {
           if (this.window) {
+            this.saveWindowSizeAndPosition();
+
+            this.window.nativeElement.style.transition = `0.5s`;
+            this.window.nativeElement.style.left = `calc(50% - 10px)`;
+            this.window.nativeElement.style.top = `100%`;
+            this.window.nativeElement.style.width = `10px`;
+            this.window.nativeElement.style.height = `10px`;
+            await this.sleep(500);
+            this.window.nativeElement.style.transition = `0s`;
+
             this.window.nativeElement.style.display = `none`;
           }
         }
@@ -72,6 +82,7 @@ export class WindowComponent implements AfterViewInit, OnInit{
     EventManager.reOpenAppEvent.subscribe(removedApp => {
       if(removedApp.name == this.desc) {
         if (this.window) {
+          this.applyTempWindowSizeAndPosition()
           this.window.nativeElement.style.display = `flex`;
         }
       }
