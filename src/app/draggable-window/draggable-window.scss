@@ -97,6 +97,23 @@
   justify-content: center;
 }
 
+.minimize:hover{
+  border: 2px solid #ececec;
+  transition: 0.3s;
+  cursor: pointer;
+
+  .hyphen{
+    border: 2px solid rgb(255, 255, 255);
+    transition: 0.3s;
+  }
+}
+.hyphen{
+  width: 15px;
+  height: 0px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: rgba(0, 0, 0, 0.15) 1px 1px;
+}
+
 .fullscreen {
   float: right;
   margin-top: -4px;
@@ -116,17 +133,6 @@
   justify-content: center;
 }
 
-.minimize:hover{
-  border: 2px solid #ececec;
-  transition: 0.3s;
-  cursor: pointer;
-
-  .hyphen{
-    border: 2px solid rgb(255, 255, 255);
-    transition: 0.3s;
-  }
-}
-
 .fullscreen:hover{
   border: 2px solid #ececec;
   transition: 0.3s;
@@ -143,12 +149,7 @@
 
   }
 }
-.hyphen{
-  width: 15px;
-  height: 0px;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  box-shadow: rgba(0, 0, 0, 0.15) 1px 1px;
-}
+
 .plus {
   position: relative;
   width: 18px;

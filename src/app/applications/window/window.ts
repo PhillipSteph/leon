@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, Type, ViewChild} from '@angular/core';
 import {EventManager} from '../../filesystem/event_manager';
+import {DraggableWindowComponent} from '../../draggable-window/draggable-window';
 export interface Application {
   name: string;
   getComponent(): Type<any>; // Import Type from '@angular/core'
@@ -12,6 +13,9 @@ export interface Application {
     <div #window class="draggable-window" [class.minimized]="minimized">
       <div class="window-header" (mousedown)="onMouseDown($event)">
         <span class="window-title">{{ desc }} </span>
+        <button (click)="fullscreen()" class="fullscreen">
+          <div class="plus"></div>
+        </button>
         <button (click)="minimize()" class="minimize">
           <div class="hyphen"></div>
         </button>
@@ -35,12 +39,18 @@ export class WindowComponent implements AfterViewInit, OnInit{
   @Input() z: number = 1;
   @Input() app!: Application;
 
+  private tempWidth = 0;
+  private tempHeight = 0;
+  private tempLeft = 0;
+  private tempTop = 0;
+
   private transitionTimeout: any;
   private isDragging = false;
   private offsetX = 0;
   private offsetY = 0;
   private mouseMoveListener: () => void = () => {}; // Mouse move listener
   private mouseUpListener: () => void = () => {};   // Mouse up listener
+  private isFullscreen: boolean = false;
 
   constructor(private renderer: Renderer2) {}
   ngAfterViewInit(): void {
@@ -64,6 +74,8 @@ export class WindowComponent implements AfterViewInit, OnInit{
       // Listen to mousemove and mouseup events
       this.mouseMoveListener = this.renderer.listen('document', 'mousemove', this.onMouseMove.bind(this));
       this.mouseUpListener = this.renderer.listen('document', 'mouseup', this.onMouseUp.bind(this));
+      this.window.nativeElement.style.zIndex = DraggableWindowComponent.mouseDownCounter++;
+
     } else {
       console.error('Window reference is not available');
     }
@@ -97,4 +109,59 @@ export class WindowComponent implements AfterViewInit, OnInit{
   ngOnInit(): void {
   }
 
+  async fullscreen() {
+    const content = this.window.nativeElement.querySelector('.window-content') as HTMLElement;
+    const minimize = this.window.nativeElement.querySelector('.minimize') as HTMLElement;
+
+    if(this.isFullscreen){
+      if(this.window){
+        this.window.nativeElement.style.transition = `0.5s`;
+        this.applyTempWindowSizeAndPosition()
+        minimize.style.background = 'transparent';
+
+        await this.sleep(450)
+
+        this.window.nativeElement.style.transition = `0s`;
+      }
+
+      this.isFullscreen = false;
+      return;
+    }
+    this.isFullscreen = true;
+    this.saveWindowSizeAndPosition();
+
+    if (this.window) {
+      if (content) {
+        content.style.backgroundSize = 'contain';
+      }
+
+      this.window.nativeElement.style.transition = `0.5s`;
+      this.window.nativeElement.style.zIndex = `10000`;
+      this.window.nativeElement.style.width = `calc(100% - 30px)`;
+      this.window.nativeElement.style.height = `calc(100% - 30px)`;
+      this.window.nativeElement.style.left = `15px`;
+      this.window.nativeElement.style.top = `15px`;
+
+      minimize.style.background = '#ccc';
+      await this.sleep(500);
+      this.window.nativeElement.style.transition = `0s`;
+    }
+  }
+
+  saveWindowSizeAndPosition() {
+    if(this.window){
+      this.tempHeight = this.window.nativeElement.style.height;
+      this.tempWidth = this.window.nativeElement.style.width;
+      this.tempLeft = this.window.nativeElement.style.left;
+      this.tempTop = this.window.nativeElement.style.top;
+    }
+  }
+  applyTempWindowSizeAndPosition() {
+    if(this.window){
+      this.window.nativeElement.style.height = this.tempHeight;
+      this.window.nativeElement.style.width = this.tempWidth;
+      this.window.nativeElement.style.left = this.tempLeft;
+      this.window.nativeElement.style.top = this.tempTop;
+    }
+  }
 }
