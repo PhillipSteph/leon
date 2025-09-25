@@ -5,5 +5,29 @@
   [width]="800"
   [height]="600"
   [app]="getFileExplorer()">
-<h1> Hier entsteht ein Datei-Explorer</h1>
+<main>
+  <div class="folderList">
+    <div class="folderRow" (click)="selectedFolder = FileSystemManager.desktop">
+      {{FileSystemManager.desktop.name}}
+    </div>
+    <ng-container *ngFor="let folder of FileSystemManager.desktop.getAllChildFolders()">
+      <div class="folderRow" (click)="selectedFolder = folder">
+        {{folder.name}}
+      </div>
+    </ng-container>
+  </div>
+  <div class="folderContent">
+    <ng-container *ngFor="let image of selectedFolder.images">
+      <div class="imagePreview">
+        <div class="img" [ngStyle]="{
+      'background-image': 'url(' + image.picture + ')'}"></div>
+        <div class="description">
+          {{image.desc}}
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</main>
+
+
 </app-window>
